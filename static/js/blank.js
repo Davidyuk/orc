@@ -1,20 +1,37 @@
 define(["jquery", "utils", "grid_lib", "datepicker", "kladr"],
-function($, utils, gridLib, datepicker, kladr) {
+function($, utils, gridLib, datepicker) {
 
     function drawParam(data, admin) {
         console.log("drawParam");
 
         var block;
 
-        if (["region", "district", "city", "street", "building", "text", "email", "password", "phon"].indexOf(data["type"]) >= 0) {
-            block = $("<input/>", {type: data["type"]});
-
-        } else if (data["type"] === "textarea") {
-            block = $("<textarea/>", {});
-
-        } else if (data["type"] === "date") {
-            block = $("<input/>", {type: "date"});
-            datepicker.initDatePicker(block);
+        switch (data["type"]) {
+            case "textarea":
+                block = $("<textarea/>", {});
+                break;
+            case "address":
+                block = $("<input/>", {type: "text"}).kladr({
+                    parentInput: null,
+                    select: null,
+                    oneString: true
+                });
+                break;
+            case "region":
+            case "district":
+            case "city":
+            case "street":
+            case "building":
+                block = $("<input/>", {type: "text"}).kladr({
+                    type: $.kladr.type[data["type"]]
+                });
+                break;
+            case "date":
+                block = $("<input/>", {type: "date"});
+                datepicker.initDatePicker(block);
+                break;
+            default:
+                block = $("<input/>", {type: data["type"]});
         }
 
         block.attr("id", data["param_id"]);
@@ -168,6 +185,8 @@ function($, utils, gridLib, datepicker, kladr) {
 
             }
 
+            $.kladr.setDefault("parentInput", "#" + dialogId + " div#form-" + d[i]["form_id"]);
+
             var tr = $("<tr/>").appendTo($("#"+dialogId +" div#form-"+d[i]["form_id"]+" table"));
             var td = $("<td/>").appendTo(tr);
             $(td).append(drawFunc(d[i], admin));
@@ -195,8 +214,6 @@ function($, utils, gridLib, datepicker, kladr) {
                 "/blankcontroller/gethistoryrequest"
             );
         });
-
-        kladr.kladr();
 
         return formIds;
     }
