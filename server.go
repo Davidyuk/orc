@@ -45,6 +45,7 @@ func main() {
     http.Handle("/css/", fileServer)
     http.Handle("/img/", fileServer)
     http.Handle("/vendor/", fileServer)
+    http.Handle("/frontend/", fileServer)
 
     addr := config.GetValue("HOSTNAME") + ":" + config.GetValue("PORT")
     log.Println("Server listening on", addr)
