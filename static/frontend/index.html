@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script>document.write('<base href="' + document.location + '" />');</script>
+    <script>
+      var base = document.location.pathname.indexOf('/static/') == 0 ? '/static/' : '/';
+      document.write('<base href="' + base + '" />');
+    </script>
     <title>Angular 2 Tour of Heroes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
