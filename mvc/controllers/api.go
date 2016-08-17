@@ -67,8 +67,11 @@ type Api struct {
 func (a *Api) Event(q string) {
 	if q == "" {
 		var events []Event
-		gormDb.Where("name LIKE ?", "%" + a.Request.URL.Query().Get("name") + "%").
-			Order("date_start desc").Find(&events)
+		query := gormDb.Order("date_start desc")
+		if name := a.Request.URL.Query().Get("name"); name != "" {
+			query = query.Where("lower(name) LIKE lower(?)", "%" + name + "%")
+		}
+		query.Find(&events)
 		utils.SendJSReply(events, a.Response)
 		return
 	}
