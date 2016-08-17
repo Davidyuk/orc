@@ -10,9 +10,33 @@ import (
     "github.com/klenin/orc/router"
     "github.com/klenin/orc/mvc/controllers"
     "github.com/klenin/orc/config"
+    "strings"
 )
 
 var err error
+
+type stopOnNotFoundResponseWriter struct {
+    http.ResponseWriter
+    IsNotFound bool
+}
+
+func (ww *stopOnNotFoundResponseWriter) WriteHeader(status int) {
+    if status == http.StatusNotFound {
+        ww.IsNotFound = true
+        for k := range ww.ResponseWriter.Header() {
+            delete(ww.ResponseWriter.Header(), k)
+        }
+    } else {
+        ww.ResponseWriter.WriteHeader(status)
+    }
+}
+
+func (ww *stopOnNotFoundResponseWriter) Write(p []byte) (int, error) {
+    if ww.IsNotFound {
+        return len(p), nil
+    }
+    return ww.ResponseWriter.Write(p)
+}
 
 func main() {
     db.DB, err = sql.Open("postgres", config.GetValue("DATABASE_URL"))
@@ -45,7 +69,14 @@ func main() {
     http.Handle("/css/", fileServer)
     http.Handle("/img/", fileServer)
     http.Handle("/vendor/", fileServer)
-    http.Handle("/frontend/", fileServer)
+    http.HandleFunc("/static/", func(w http.ResponseWriter, r *http.Request) {
+        r.URL.Path = strings.Replace(r.URL.Path, "static", "frontend", 1)
+        ww := &stopOnNotFoundResponseWriter{ResponseWriter: w}
+        fileServer.ServeHTTP(ww, r)
+        if ww.IsNotFound {
+            http.ServeFile(w, r, "./static/frontend/index.html")
+        }
+    })
 
     addr := config.GetValue("HOSTNAME") + ":" + config.GetValue("PORT")
     log.Println("Server listening on", addr)
