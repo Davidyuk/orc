@@ -1,18 +1,17 @@
-<div *ngIf="hero">
-  <h2>{{hero.name}} details!</h2>
-  <div>
-    <label>id: </label>{{hero.id}}</div>
-  <div>
-    <label>name: </label>
-    <input [(ngModel)]="hero.name" placeholder="name" />
-   </div>
-  <button (click)="goBack()">Back</button>
-  <button (click)="save()">Save</button>
-</div>
-
-
-<!-- 
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
--->
+<md-card *ngIf="hero">
+  <md-card-header>{{hero.name}}</md-card-header>
+  <md-card-content>
+    <div>
+      <label>Дата начала: </label>{{hero.dateStart}}
+    </div>
+    <div>
+      <label>Дата завершения: </label>{{hero.dateFinish}}
+    </div>
+    <div>
+      <md-input [(ngModel)]="hero.name" placeholder="Название"></md-input>
+    </div>
+    <button md-raised-button color="warn" (click)="goBack()">Изменить</button>
+    <button md-raised-button color="primary" (click)="save()">Сохранить</button>
+    <button md-raised-button color="accent" (click)="save()">Заполнить анкету</button>
+  </md-card-content>
+</md-card>

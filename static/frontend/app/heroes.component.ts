@@ -1,69 +1,72 @@
 import { Component, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
 
-import { Hero }                from './hero';
-import { HeroService }         from './hero.service';
+import { Event }                from './hero';
+import { EventService }         from './hero.service';
+
+import { Observable }        from 'rxjs/Observable';
+import { Subject }           from 'rxjs/Subject';
 
 @Component({
   selector: 'my-heroes',
   templateUrl: 'app/heroes.component.html',
   styleUrls:  ['app/heroes.component.css']
 })
-export class HeroesComponent implements OnInit {
-  heroes: Hero[];
-  selectedHero: Hero;
+export class EventsComponent implements OnInit {
+  heroes: Observable<Event[]>;
+  private searchTerms = new Subject<string>();
+  selectedHero: Event;
   addingHero = false;
   error: any;
 
   constructor(
     private router: Router,
-    private heroService: HeroService) { }
+    private heroService: EventService) { }
 
   getHeroes() {
     this.heroService
-        .getHeroes()
-        .then(heroes => this.heroes = heroes)
-        .catch(error => this.error = error);
+      .getHeroes()
+      .then(heroes => this.heroes = Observable.of<Event[]>(heroes))
+      .catch(error => this.error = error);
   }
+
+  search(term: string) { this.searchTerms.next(term); }
 
   addHero() {
     this.addingHero = true;
     this.selectedHero = null;
   }
 
-  close(savedHero: Hero) {
+  close(savedHero: Event) {
     this.addingHero = false;
-    if (savedHero) { this.getHeroes(); }
+    alert('if (savedHero) { this.getHeroes(); }');
   }
 
-  deleteHero(hero: Hero, event: any) {
+  deleteHero(hero: Event, event: any) {
     event.stopPropagation();
     this.heroService
         .delete(hero)
-        .then(res => {
-          this.heroes = this.heroes.filter(h => h !== hero);
-          if (this.selectedHero === hero) { this.selectedHero = null; }
-        })
         .catch(error => this.error = error);
   }
 
   ngOnInit() {
-    this.getHeroes();
+    this.heroes = this.searchTerms
+      .debounceTime(300).distinctUntilChanged()
+      .switchMap(term => this.heroService.search(term))
+      .catch(error => {
+        this.error = error;
+        return Observable.of<Event[]>([]);
+      });
+    // this.search('');
+    setTimeout(() => this.search(''));
   }
 
-  onSelect(hero: Hero) {
+  onSelect(hero: Event) {
     this.selectedHero = hero;
     this.addingHero = false;
   }
 
-  gotoDetail() {
-    this.router.navigate(['/detail', this.selectedHero.id]);
+  gotoDetail(hero: Event) {
+    this.router.navigate(['/detail', hero.id]);
   }
 }
-
-
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

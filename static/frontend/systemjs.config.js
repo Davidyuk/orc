@@ -9,6 +9,7 @@
     'app':                        'app', // 'dist',
 
     '@angular':                   'node_modules/@angular',
+    '@angular2-material':         'node_modules/@angular2-material',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
     'rxjs':                       'node_modules/rxjs'
   };
@@ -48,6 +49,33 @@
 
   // Add package entries for angular packages
   ngPackageNames.forEach(setPackageConfig);
+
+  var materialPkgs = [
+    'core',
+    'button',
+    'card',
+    'checkbox',
+    'dialog',
+    'grid-list',
+    'icon',
+    'input',
+    'list',
+    'menu',
+    'progress-bar',
+    'progress-circle',
+    'radio',
+    'sidenav',
+    'slider',
+    'slide-toggle',
+    'button-toggle',
+    'tabs',
+    'toolbar',
+    'tooltip',
+  ];
+
+  materialPkgs.forEach(function(pkg) {
+    packages['@angular2-material/' + pkg] = {main: pkg + '.js'};
+  });
 
   // No umd for router yet
   packages['@angular/router'] = { main: 'index.js', defaultExtension: 'js' };

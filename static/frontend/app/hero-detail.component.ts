@@ -2,22 +2,22 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Hero }        from './hero';
-import { HeroService } from './hero.service';
+import { Event }        from './hero';
+import { EventService } from './hero.service';
 
 @Component({
   selector: 'my-hero-detail',
   templateUrl: 'app/hero-detail.component.html',
   styleUrls: ['app/hero-detail.component.css']
 })
-export class HeroDetailComponent implements OnInit {
-  @Input() hero: Hero;
+export class EventDetailComponent implements OnInit {
+  @Input() hero: Event;
   @Output() close = new EventEmitter();
   error: any;
   navigated = false; // true if navigated here
 
   constructor(
-    private heroService: HeroService,
+    private heroService: EventService,
     private route: ActivatedRoute) {
   }
 
@@ -30,7 +30,7 @@ export class HeroDetailComponent implements OnInit {
             .then(hero => this.hero = hero);
       } else {
         this.navigated = false;
-        this.hero = new Hero();
+        this.hero = new Event();
       }
     });
   }
@@ -44,7 +44,7 @@ export class HeroDetailComponent implements OnInit {
         })
         .catch(error => this.error = error); // TODO: Display error message
   }
-  goBack(savedHero: Hero = null) {
+  goBack(savedHero: Event = null) {
     this.close.emit(savedHero);
     if (this.navigated) { window.history.back(); }
   }

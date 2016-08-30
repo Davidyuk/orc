@@ -1,21 +1,27 @@
 import { Injectable }    from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Response, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Hero } from './hero';
+import { Event } from './hero';
 
 @Injectable()
-export class HeroService {
+export class EventService {
 
-  private heroesUrl = 'app/heroes';  // URL to web api
+  private heroesUrl = 'api/event';
 
   constructor(private http: Http) { }
+
+  search(term: string) {
+    return this.http
+      .get(`${this.heroesUrl}?name=${term}`)
+      .map((r: Response) => r.json() as Event[]);
+  }
 
   getHeroes() {
     return this.http.get(this.heroesUrl)
                .toPromise()
-               .then(response => response.json().data as Hero[])
+               .then(response => response.json() as Event[])
                .catch(this.handleError);
   }
 
@@ -24,18 +30,18 @@ export class HeroService {
                .then(heroes => heroes.find(hero => hero.id === id));
   }
 
-  save(hero: Hero): Promise<Hero>  {
-    if (hero.id) {
-      return this.put(hero);
+  save(event: Event): Promise<Event>  {
+    if (event.id) {
+      return this.put(event);
     }
-    return this.post(hero);
+    return this.post(event);
   }
 
-  delete(hero: Hero) {
+  delete(event: Event) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    let url = `${this.heroesUrl}/${hero.id}`;
+    let url = `${this.heroesUrl}/${event.id}`;
 
     return this.http
                .delete(url, {headers: headers})
@@ -43,20 +49,20 @@ export class HeroService {
                .catch(this.handleError);
   }
 
-  // Add new Hero
-  private post(hero: Hero): Promise<Hero> {
+  // Add new Event
+  private post(hero: Event): Promise<Event> {
     let headers = new Headers({
       'Content-Type': 'application/json'});
 
     return this.http
                .post(this.heroesUrl, JSON.stringify(hero), {headers: headers})
                .toPromise()
-               .then(res => res.json().data)
+               .then(res => res.json())
                .catch(this.handleError);
   }
 
-  // Update existing Hero
-  private put(hero: Hero) {
+  // Update existing Event
+  private put(hero: Event) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -74,11 +80,3 @@ export class HeroService {
     return Promise.reject(error.message || error);
   }
 }
-
-
-
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

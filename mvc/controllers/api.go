@@ -65,6 +65,8 @@ type Api struct {
 }
 
 func (a *Api) Event(q string) {
+	a.Response.Header().Add("Access-Control-Allow-Origin", "http://localhost:3000")
+
 	if q == "" {
 		var events []Event
 		query := gormDb.Order("date_start desc")
