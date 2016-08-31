@@ -7,8 +7,8 @@
     </form>
 
     <md-nav-list dense>
-      <md-list-item *ngFor="let hero of heroes | async">
-        <a md-line [routerLink]="['/detail', hero.id]">{{hero.name}}</a>
+      <md-list-item *ngFor="let event of events | async">
+        <a md-line [routerLink]="['/detail', event.id]">{{event.name}}</a>
         Через&nbsp;2&nbsp;дня
       </md-list-item>
     </md-nav-list>

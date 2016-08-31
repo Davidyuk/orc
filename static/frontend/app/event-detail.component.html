@@ -1,14 +1,14 @@
-<md-card *ngIf="hero">
-  <md-card-header>{{hero.name}}</md-card-header>
+<md-card *ngIf="event">
+  <md-card-header>{{event.name}}</md-card-header>
   <md-card-content>
     <div>
-      <label>Дата начала: </label>{{hero.dateStart}}
+      <label>Дата начала: </label>{{event.dateStart}}
     </div>
     <div>
-      <label>Дата завершения: </label>{{hero.dateFinish}}
+      <label>Дата завершения: </label>{{event.dateFinish}}
     </div>
     <div>
-      <md-input [(ngModel)]="hero.name" placeholder="Название"></md-input>
+      <md-input [(ngModel)]="event.name" placeholder="Название"></md-input>
     </div>
     <button md-raised-button color="warn" (click)="goBack()">Изменить</button>
     <button md-raised-button color="primary" (click)="save()">Сохранить</button>

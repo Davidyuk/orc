@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { EventsComponent }     from './heroes.component';
-import { EventDetailComponent } from './hero-detail.component';
+import { EventsComponent }     from './events.component';
+import { EventDetailComponent } from './event-detail.component';
 
 const appRoutes: Routes = [
   {

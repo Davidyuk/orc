@@ -7,17 +7,17 @@ import { HttpModule, RequestOptions } from '@angular/http';
 import { AppComponent }   from './app.component';
 import { routing }        from './app.routing';
 
-import { EventsComponent }      from './heroes.component';
-import { EventDetailComponent }  from './hero-detail.component';
+import { EventsComponent }      from './events.component';
+import { EventDetailComponent }  from './event-detail.component';
 
-import { EventService }  from './hero.service';
-import { AppRequestOptions } from "./request-options.service";
+import { EventService }  from './event.service';
+import { AppRequestOptions } from './request-options.service';
 
-import {MdButtonModule} from "@angular2-material/button";
-import {MdCardModule} from "@angular2-material/card";
-import {MdToolbarModule} from "@angular2-material/toolbar";
-import {MdInputModule} from "@angular2-material/input";
-import {MdListModule} from "@angular2-material/list";
+import { MdButtonModule } from '@angular2-material/button';
+import { MdCardModule } from '@angular2-material/card';
+import { MdToolbarModule } from '@angular2-material/toolbar';
+import { MdInputModule } from '@angular2-material/input';
+import { MdListModule } from '@angular2-material/list';
 
 @NgModule({
   imports: [
@@ -41,10 +41,3 @@ import {MdListModule} from "@angular2-material/list";
 })
 export class AppModule {
 }
-
-
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

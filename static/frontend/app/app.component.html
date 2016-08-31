@@ -1,11 +1,7 @@
-<md-content style="display: flex; flex-direction: column; height: 100%">
-  <md-toolbar color="primary">
-    {{title}}
-    <span style="flex: 1 1 auto"></span>
-    <a md-button routerLink="/events" routerLinkActive="active">Мероприятия</a>
-  </md-toolbar>
+<md-toolbar color="primary">
+  {{title}}
+  <span style="flex: 1 1 auto"></span>
+  <a md-button routerLink="/events" routerLinkActive="active">Мероприятия</a>
+</md-toolbar>
 
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-</md-content>
+<router-outlet></router-outlet>
